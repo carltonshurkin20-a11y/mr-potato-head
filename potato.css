@@ -1,0 +1,349 @@
+     body {
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: auto 1fr;
+            font-family: system-ui, sans-serif;
+            color: #222;
+            background: #7cc8f5 url(images/background-day.svg) center / cover no-repeat;
+        }
+
+        header {
+            position: relative;
+            z-index: 1; /* above the play area so the dropdown list shows over it */
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75em 1.5em;
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 3px solid #f4a62a;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.4em;
+            color: #c8732a;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4em;
+        }
+
+        /* round, colorful buttons instead of plain gray ones */
+        button,
+        input {
+            font: inherit;
+            font-size: 0.85em;
+            padding: 0.45em 1em;
+            border: 2px solid #f4a62a;
+            border-radius: 999px;
+            background: white;
+            color: #222;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            background: #ffe8bf;
+            transform: scale(1.05);
+        }
+
+        #musicBtn.playing {
+            background: #f4a62a;
+            color: white;
+        }
+
+        /* saved designs dropdown: the list is hidden until the button adds .open */
+        .dropdown {
+            position: relative;
+        }
+
+        #designs {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            min-width: 200px;
+            margin: 0;
+            padding: 0.4em;
+            list-style: none;
+            background: white;
+            border: 2px solid #f4a62a;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown.open #designs {
+            display: block;
+        }
+
+        /* one row per saved design: name on the left, x on the right */
+        .design {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5em;
+            padding: 0.2em 0.3em;
+            border-radius: 8px;
+        }
+
+        .design:hover {
+            background: #ffe8bf;
+        }
+
+        .design .load {
+            flex: 1;
+            text-align: left;
+            border: none;
+            background: none;
+        }
+
+        .design .load:hover {
+            transform: none;
+        }
+
+        .empty {
+            padding: 0.5em;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .delete {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: #c0392b;
+        }
+
+        /* the x itself comes from css, the button has no text */
+        .delete::before {
+            content: '✕';
+            font-size: 11px;
+            line-height: 20px;
+            color: white;
+        }
+
+        .delete:hover {
+            background: #e74c3c;
+            transform: scale(1.2);
+        }
+
+        /* sidebar with the parts */
+        #sidebar {
+            min-height: 0; /* lets the sidebar scroll inside the grid row */
+            overflow-y: auto;
+            padding: 0 1.5em 1.5em;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        h2 {
+            margin: 1.2em 0 0.6em;
+            font-size: 0.75em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #c8732a;
+        }
+
+        .parts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5em;
+        }
+
+        .part {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 6px;
+            box-sizing: border-box; /* keep the padding inside the 64px */
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: grab;
+            transition: transform 0.1s;
+        }
+
+        .part:hover {
+            border-color: #f4a62a;
+            transform: scale(1.1);
+        }
+
+        /* the click goes to the .part box, not the picture inside it */
+        .part img {
+            max-width: 100%;
+            max-height: 100%;
+            pointer-events: none;
+        }
+
+        /* the potato, centered */
+        #playArea {
+            position: relative;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* pieces are positioned inside the container so they stay on the potato when the window resizes */
+        /* z-index 0 keeps the pieces' z-indexes inside the container, so they can't cover the dropdown */
+        #container {
+            position: relative;
+            z-index: 0;
+        }
+
+        .potato {
+            display: block;
+            width: 340px; /* the potato picture is 170px wide, so this is SCALE 2 in the js */
+            filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        .piece {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .piece.dragging {
+            cursor: grabbing;
+            filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.35));
+        }
+
+        /* drop a piece here to throw it away */
+        #trash {
+            position: absolute;
+            right: 1.5em;
+            bottom: 1.5em;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5em;
+            background: rgba(255, 255, 255, 0.85);
+            border: 3px dashed #c0392b;
+            border-radius: 50%;
+            transition: transform 0.15s;
+        }
+
+        #trash.open {
+            transform: scale(1.3) rotate(-10deg);
+            background: #ffd6d1;
+        }
+
+        #hint {
+            position: absolute;
+            left: 1.5em;
+            bottom: 1.5em;
+            margin: 0;
+            padding: 0.6em 1em;
+            font-size: 0.8em;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+        }
+
+      
+      
+        
+        /* phones: header on top, potato in the middle, parts in a sideways-scrolling strip at the bottom */
+        @media (max-width: 600px) {
+            body {
+                height: 100dvh; /* dvh leaves out the safari address bar so nothing hides behind it */
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                grid-template-areas:
+                    "header"
+                    "play"
+                    "sidebar";
+            }
+
+            header {
+                grid-area: header;
+                justify-content: center;
+                padding: 0.5em;
+            }
+
+            header h1 {
+                font-size: 1.1em;
+            }
+
+            .controls {
+                justify-content: center;
+            }
+
+            #designName {
+                width: 8em;
+            }
+
+            #playArea {
+                grid-area: play;
+            }
+
+            /* the potato stays 340px because the pieces are placed in px on it, so it already fits an iphone */
+
+            #sidebar {
+                grid-area: sidebar;
+                display: flex;
+                gap: 1em;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 0 0.75em calc(0.75em + env(safe-area-inset-bottom));
+                border-top: 3px solid #f4a62a;
+            }
+
+            .category {
+                flex-shrink: 0;
+            }
+
+            h2 {
+                margin: 0.6em 0 0.4em;
+            }
+
+            /* one row of parts per category instead of 3 across */
+            .parts {
+                grid-template-columns: none;
+                grid-auto-flow: column;
+            }
+
+            .part {
+                width: 52px;
+                height: 52px;
+            }
+
+            #trash {
+                right: 0.75em;
+                bottom: 0.75em;
+                width: 56px;
+                height: 56px;
+                font-size: 1.6em;
+            }
+
+            #hint {
+                display: none; /* mouse wheel and double click tips don't help on a phone */
+            }
+
+            /* the dropdown would hang off the left edge if it lines up with a button near the middle */
+            #designs {
+                position: fixed;
+                top: auto;
+                left: 0.5em;
+                right: 0.5em;
+                min-width: 0;
+            }
+        }

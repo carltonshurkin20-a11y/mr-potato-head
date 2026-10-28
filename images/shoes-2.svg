@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="50" viewBox="0 0 150 50">
+  <g id="shoe">
+    <rect x="4" y="38" width="64" height="8" rx="4" fill="#fff"/>
+    <ellipse cx="34" cy="32" rx="32" ry="12" fill="#e0302f"/>
+    <ellipse cx="48" cy="20" rx="16" ry="11" fill="#f04a48"/>
+    <path d="M40 16 l14 6 M38 22 l14 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <use href="#shoe" transform="translate(150 0) scale(-1 1)"/>
+</svg>

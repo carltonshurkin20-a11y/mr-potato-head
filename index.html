@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Potato Head</title>
+   
+    <link rel="stylesheet" href="potato.css">
+</head>
+<body class="day">
+    <header>
+        <h1>🥔 Mr. Potato Head</h1>
+
+        <div class="controls">
+            <!-- background music, loops forever -->
+            <audio id="music" src="music/Wheels on the Bus @CoComelon Nursery Rhymes & Kids Songs.mp3" loop></audio>
+           <!-- <audio id="music2" src="music/Wheels on the Bus @CoComelon Nursery Rhymes & Kids Songs.mp3" loop></audio> -->
+            <button id="musicBtn">♪ music off</button>
+            <button id="backgroundBtn">🌙 night</button>
+            <button id="clear">clear</button>
+        </div>
+
+        <!-- save a design and a list of saved designs to load -->
+        <div class="controls">
+            <input id="designName" type="text" placeholder="design name">
+            <button id="save">save</button>
+            <!-- homemade dropdown (a real <select> can't have an x on each option) -->
+            <div id="designsMenu" class="dropdown">
+                <button id="designsBtn">saved designs ▾</button>
+                <ul id="designs"></ul>
+            </div>
+        </div>
+    </header>
+
+    <aside id="sidebar">
+        <section class="category">
+            <h2>Eyes</h2>
+            <div class="parts">
+                <div class="part"><img src="images/eyes-1.png" alt="googly eyes"></div>
+                <div class="part"><img src="images/eyes-2.png" alt="big eyes"></div>
+                <div class="part"><img src="images/eyes-lashes.png" alt="eyes with lashes"></div>
+                <div class="part"><img src="images/eyes-blue.png" alt="sleepy blue eyes"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Eyebrows</h2>
+            <div class="parts">
+                <div class="part"><img src="images/brows-1.svg" alt="happy eyebrows"></div>
+                <div class="part"><img src="images/brows-2.svg" alt="angry eyebrows"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Nose</h2>
+            <div class="parts">
+                <div class="part"><img src="images/nose-orange.png" alt="orange nose"></div>
+                <div class="part"><img src="images/nose-red.png" alt="red clown nose"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Mouth</h2>
+            <div class="parts">
+                <div class="part"><img src="images/mouth-teeth.png" alt="toothy smile"></div>
+                <div class="part"><img src="images/mouth-lips.png" alt="red lips"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Mustache</h2>
+            <div class="parts">
+                <div class="part"><img src="images/mustache.png" alt="mustache with teeth"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Ears</h2>
+            <div class="parts">
+                <div class="part"><img src="images/ear-left.png" alt="left ear"></div>
+                <div class="part"><img src="images/ear-right.png" alt="right ear"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Hats</h2>
+            <div class="parts">
+                <div class="part"><img src="images/hat-top.svg" alt="top hat"></div>
+                <div class="part"><img src="images/hat-cap.svg" alt="baseball cap"></div>
+                <div class="part"><img src="images/hat-party.svg" alt="party hat"></div>
+                <div class="part"><img src="images/hat-wig.png" alt="blonde wig"></div>
+                 <div class="part"><img src="images/wig2.png" alt="brown wig"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Arms</h2>
+            <div class="parts">
+                <div class="part"><img src="images/arm-left.svg" alt="left arm"></div>
+                <div class="part"><img src="images/arm-right.svg" alt="right arm"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Shoes</h2>
+            <div class="parts">
+                <div class="part"><img src="images/shoes-1.svg" alt="brown shoes"></div>
+                <div class="part"><img src="images/shoes-2.svg" alt="red sneakers"></div>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2>Extras</h2>
+            <div class="parts">
+                <div class="part"><img src="images/glasses-red.png" alt="red glasses"></div>
+                <div class="part"><img src="images/disguise.png" alt="disguise glasses"></div>
+            </div>
+        </section>
+    </aside>
+
+    <main id="playArea">
+        <div id="container">
+            <img class="potato" src="images/potato.png" alt="blank potato" draggable="false">
+        </div>
+
+        <p id="hint">drag parts onto the potato · scroll on a part to resize · double click to spin</p>
+        <div id="trash" title="drop a part here to throw it away">🗑️</div>
+    </main>
+
+    <script src="jquery-4.0.0.min.js"></script>
+    <script src="mrpotatohead.js"></script>
+</body>
+</html>
