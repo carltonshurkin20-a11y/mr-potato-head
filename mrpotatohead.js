@@ -15,8 +15,10 @@ let topZ = 10; // goes up every time a piece is picked up so it lands on top of 
 // dragging
 // =====================================================================
 
-// mousedown on a sidebar part makes a new copy of it, so a part can be used more than once
-$('.part').on('mousedown', e => {
+// pointer events cover the mouse and touchscreens, so one set of handlers works for both
+
+// pressing a sidebar part makes a new copy of it, so a part can be used more than once
+$('.part').on('pointerdown', e => {
   e.preventDefault();
 
   const img = $(e.currentTarget).find('img')[0];
@@ -37,8 +39,8 @@ $('.part').on('mousedown', e => {
   startDrag($piece, e);
 });
 
-// mousedown on a piece that's already on the potato picks it up again
-$container.on('mousedown', '.piece', e => {
+// pressing a piece that's already on the potato picks it up again
+$container.on('pointerdown', '.piece', e => {
   e.preventDefault();
   startDrag($(e.currentTarget), e);
 });
@@ -56,7 +58,7 @@ function startDrag($piece, e) {
   draggee = $piece;
   draggee.css('z-index', ++topZ).addClass('dragging');
 
-  $(window).on('mousemove', handleMouseMove).on('mouseup', handleMouseUp);
+  $(window).on('pointermove', handleMouseMove).on('pointerup pointercancel', handleMouseUp);
 }
 
 function handleMouseMove(e) {
@@ -71,7 +73,7 @@ function handleMouseMove(e) {
 }
 
 function handleMouseUp(e) {
-  $(window).off('mousemove', handleMouseMove).off('mouseup', handleMouseUp);
+  $(window).off('pointermove', handleMouseMove).off('pointerup pointercancel', handleMouseUp);
 
   // dropped on the trash or back on the sidebar, throw it away
   if (isOver($trash, e) || isOver($sidebar, e)) {
@@ -217,7 +219,7 @@ const $designsMenu = $('#designsMenu');
 $('#designsBtn').on('click', () => $designsMenu.toggleClass('open'));
 
 // clicking anywhere outside the dropdown closes it
-$(document).on('mousedown', e => {
+$(document).on('pointerdown', e => {
   if (!$(e.target).closest('#designsMenu').length) {
     $designsMenu.removeClass('open');
   }
@@ -288,9 +290,9 @@ const music = $('#music')[0];
 const $musicBtn = $('#musicBtn');
 music.volume = 0.5;
 
-// browsers block music until the user clicks something, so start it on the first click anywhere
-// (unless that click is the music button, which handles it itself)
-$(document).one('mousedown', e => {
+// browsers block music until the user clicks or taps something, so start it on the first press anywhere
+// (unless that press is the music button, which handles it itself)
+$(document).one('pointerdown', e => {
   if (!$(e.target).closest('#musicBtn').length) {
     music.play();
   }

@@ -176,6 +176,7 @@
             border: 2px solid #eee;
             border-radius: 12px;
             cursor: grab;
+            touch-action: none; /* so dragging on a touchscreen moves the part instead of scrolling the page */
             transition: transform 0.1s;
         }
 
@@ -218,6 +219,7 @@
             position: absolute;
             cursor: grab;
             user-select: none;
+            touch-action: none;
         }
 
         .piece.dragging {
